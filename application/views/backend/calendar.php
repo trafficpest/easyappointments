@@ -225,7 +225,23 @@
                                     <label for="appointment-location" class="control-label">
                                         <?= lang('location') ?>
                                     </label>
-                                    <input id="appointment-location" class="form-control">
+                                    <select id="appointment-location" class="required form-control">
+                                      <?php
+                                      // Place all service locations in a select field
+                                      // sort and remove duplicates
+                                      foreach ($available_services as $service)
+                                      {
+                                        $available_locations[] = $service['location'];
+                                      }
+
+                                      $available_locations = array_unique($available_locations);   
+                                      foreach ($available_locations as $location)
+                                      {
+                                        echo '<option value="' . $location . '">'
+                                            . $location . '</option>';
+                                      }
+                                    ?>
+                                    </select>
                                 </div>
 
                                 <div class="form-group">

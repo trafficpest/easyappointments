@@ -112,7 +112,7 @@ class Appointments_model extends EA_Model {
         {
             throw new Exception('Appointment provider id is invalid.');
         }
-
+        
         if ($appointment['is_unavailable'] == FALSE)
         {
             // Check if the customer's id is valid.
@@ -135,6 +135,33 @@ class Appointments_model extends EA_Model {
             if ($num_rows === 0)
             {
                 throw new Exception('Appointment service id is invalid.');
+            }
+
+            // Check if the location is in use.
+            $num_rows = $this->db
+              ->select('*')
+              ->from('appointments')
+              ->where('start_datetime <=', $appointment['start_datetime'])
+              ->where('end_datetime >=', $appointment['start_datetime'])
+              ->where('location', $appointment['location'])
+              ->get()->num_rows();
+
+            if ($num_rows !== 0)
+            {
+                throw new Exception('That location has an unfinished event.');
+            }
+
+            $num_rows = $this->db
+              ->select('*')
+              ->from('appointments')
+              ->where('start_datetime <=', $appointment['end_datetime'])
+              ->where('end_datetime >=', $appointment['end_datetime'])
+              ->where('location', $appointment['location'])
+              ->get()->num_rows();
+
+            if ($num_rows !== 0)
+            {
+                throw new Exception('That location has an upcoming event.');
             }
         }
 
