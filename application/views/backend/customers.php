@@ -172,7 +172,7 @@
                             <?= lang('notes') ?>
 
                         </label>
-                        <textarea id="notes" rows="4" class="form-control"></textarea>
+                        <textarea id="notes" rows="4" class="form-control" readonly></textarea>
                     </div>
                 </div>
 

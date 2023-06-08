@@ -138,6 +138,12 @@ class Appointments_model extends EA_Model {
             }
 
             // Check if the location is in use.
+            $attendents_number = $this->db
+              ->select('*')
+              ->from('services')
+              ->where('location', $appointment['location'])
+              ->get()->first_row()->attendants_number;
+            
             $num_rows = $this->db
               ->select('*')
               ->from('appointments')
@@ -146,7 +152,7 @@ class Appointments_model extends EA_Model {
               ->where('location', $appointment['location'])
               ->get()->num_rows();
 
-            if ($num_rows !== 0)
+            if ($num_rows >= $attendents_number)
             {
                 throw new Exception('That location has an unfinished event.');
             }
@@ -159,10 +165,37 @@ class Appointments_model extends EA_Model {
               ->where('location', $appointment['location'])
               ->get()->num_rows();
 
-            if ($num_rows !== 0)
+            if ($num_rows >= $attendents_number)
             {
                 throw new Exception('That location has an upcoming event.');
             }
+
+            $num_rows = $this->db
+              ->select('*')
+              ->from('appointments')
+              ->where('start_datetime <=', $appointment['start_datetime'])
+              ->where('end_datetime >=', $appointment['start_datetime'])
+              ->where('id_users_provider', $appointment['id_users_provider'])
+              ->get()->num_rows();
+
+            if ($num_rows != 0)
+            {
+                throw new Exception('That provider has an unfinished event.');
+            }
+
+            $num_rows = $this->db
+              ->select('*')
+              ->from('appointments')
+              ->where('start_datetime <=', $appointment['end_datetime'])
+              ->where('end_datetime >=', $appointment['end_datetime'])
+              ->where('id_users_provider', $appointment['id_users_provider'])
+              ->get()->num_rows();
+
+            if ($num_rows != 0)
+            {
+                throw new Exception('That provider has an upcoming event.');
+            }
+
         }
 
         return TRUE;

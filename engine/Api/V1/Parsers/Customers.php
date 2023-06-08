@@ -37,6 +37,7 @@ class Customers implements ParsersInterface {
             'address' => $response['address'],
             'city' => $response['city'],
             'zip' => $response['zip_code'],
+            'timezone' => $response['timezone'],
             'notes' => $response['notes']
         ];
 
@@ -91,6 +92,11 @@ class Customers implements ParsersInterface {
         if ( array_key_exists('zip', $request))
         {
             $decoded_request['zip_code'] = $request['zip'];
+        }
+
+        if ( array_key_exists('timezone', $request))
+        {
+            $decoded_request['timezone'] = $request['timezone'];
         }
 
         if ( array_key_exists('notes', $request))

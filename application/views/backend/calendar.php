@@ -5,7 +5,7 @@
 <script src="<?= asset_url('assets/ext/jquery-ui/jquery-ui-timepicker-addon.min.js') ?>"></script>
 <script src="<?= asset_url('assets/js/working_plan_exceptions_modal.js') ?>"></script>
 <script src="<?= asset_url('assets/js/backend_calendar.js') ?>"></script>
-<script src="<?= asset_url('assets/js/backend_calendar_default_view.js') ?>"></script>
+<script src="<?= asset_url('assets/js/backend_calendar_default_view_mod.js') ?>"></script>
 <script src="<?= asset_url('assets/js/backend_calendar_table_view.js') ?>"></script>
 <script src="<?= asset_url('assets/js/backend_calendar_google_sync.js') ?>"></script>
 <script src="<?= asset_url('assets/js/backend_calendar_appointments_modal.js') ?>"></script>
@@ -191,6 +191,8 @@
 
                                                 if (count($group) > 0)
                                                 {
+                                                  if ($key != 'Location')
+                                                  {
                                                     echo '<optgroup label="' . $group_label . '">';
                                                     foreach ($group as $service)
                                                     {
@@ -198,6 +200,7 @@
                                                             . $service['name'] . '</option>';
                                                     }
                                                     echo '</optgroup>';
+                                                  }
                                                 }
                                             }
                                         }
@@ -231,7 +234,10 @@
                                       // sort and remove duplicates
                                       foreach ($available_services as $service)
                                       {
-                                        $available_locations[] = $service['location'];
+                                        if ($service['category_name'] == 'Location')
+                                        {  
+                                          $available_locations[] = $service['location'];
+                                        }
                                       }
 
                                       $available_locations = array_unique($available_locations);   
