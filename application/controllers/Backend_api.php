@@ -191,6 +191,10 @@ class Backend_api extends EA_Controller {
             {
                 $where_id = 'id_users_provider';
             }
+            elseif ($this->input->post('filter_type') == 'location')
+            {
+                $where_id = 'location';
+            }
             else
             {
                 $where_id = 'id_services';
@@ -207,7 +211,6 @@ class Backend_api extends EA_Controller {
                 or (start_datetime <= ' . $start_date . ' AND end_datetime >= ' . $end_date . ')) 
                 AND is_unavailable = 0
             ';
-
             $response['appointments'] = $this->appointments_model->get_batch($where_clause);
 
             foreach ($response['appointments'] as &$appointment)

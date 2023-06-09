@@ -24,6 +24,7 @@ window.BackendCalendarDefaultView = window.BackendCalendarDefaultView || {};
     // Constants
     var FILTER_TYPE_PROVIDER = 'provider';
     var FILTER_TYPE_SERVICE = 'service';
+    var FILTER_TYPE_LOCATION = 'location';
 
     // Variables
     var lastFocusedEventData; // Contains event data for later use.
@@ -264,7 +265,7 @@ window.BackendCalendarDefaultView = window.BackendCalendarDefaultView || {};
          */
         $('#select-filter-item').on('change', function () {
             // If current value is service, then the sync buttons must be disabled.
-            if ($('#select-filter-item option:selected').attr('type') === FILTER_TYPE_SERVICE) {
+            if ($('#select-filter-item option:selected').attr('type') === FILTER_TYPE_SERVICE || $('#select-filter-item option:selected').attr('type') === FILTER_TYPE_LOCATION) {
                 $('#google-sync, #enable-sync, #insert-appointment, #insert-dropdown').prop('disabled', true);
                 $('#calendar').fullCalendar('option', {
                     selectable: false,
@@ -1566,8 +1567,8 @@ window.BackendCalendarDefaultView = window.BackendCalendarDefaultView || {};
                 'html': GlobalVariables.availableServices.map(function (availableService) {
                   if (availableService.category_name === 'Location') {
                     return $('<option/>', {
-                        'value': availableService.id,
-                        'type': FILTER_TYPE_SERVICE,
+                        'value': availableService.location,
+                        'type': FILTER_TYPE_LOCATION,
                         'text': availableService.location
                     })
                   }
